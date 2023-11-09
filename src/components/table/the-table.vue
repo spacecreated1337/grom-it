@@ -12,6 +12,10 @@ import TableModal from "@/components/table/components/table-modal.vue"
 
 const tableCaptionTitle: string = "Таблица со всеми персонажами из мультсериала Рик и Морти"
 
+const emits = defineEmits<{
+  (e: "remove-loader"): void
+}>()
+
 let tableHeaders: Ref<Headers> = ref(null)
 let characters: Ref<Character[] | null> = ref(null)
 let sortState: Ref<number> = ref(0)
@@ -37,6 +41,7 @@ const closeModal = () => {
 
 onMounted(async () => {
   characters.value = await getCharacters()
+  emits("remove-loader")
   tableHeaders.value = Object.keys(characters.value[0]).filter((key) => key !== "episode")
 })
 
@@ -124,7 +129,7 @@ table {
     white-space: nowrap;
   }
 
-  & tr {
+  & tbody tr {
     cursor: pointer;
   }
 

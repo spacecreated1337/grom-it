@@ -22,10 +22,8 @@ const headersTranslate = {
   url: "Ссылка",
   created: "Дата создания"
 }
-
+const headersToSort = ["gender", "name", "origin"]
 const clickHandler = (header: string) => {
-  const headersToSort = ["gender", "name", "origin"]
-
   if (headersToSort.includes(header)) {
     emits("sort", header)
   }

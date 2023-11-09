@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import Character from "@/types/table/Character.ts"
-import customModal from "@/components/custom-modal.vue"
+import customModal from "@/components/ui/custom-modal.vue"
 import { CharacterStatus } from "@/types/table/CharacterStatus.ts"
 
 const characterStatus: CharacterStatus = {
