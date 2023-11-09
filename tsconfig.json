@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "noImplicitThis": true,
     "target": "es2022",
     "module": "es2022",
     "moduleResolution": "node",
@@ -15,8 +16,13 @@
   },
   "include": [
     "src/**/*.ts",
-    "src/**/*.d.ts",
+    "./*.d.ts",
     "src/**/*.tsx",
     "src/**/*.vue"
+  ],
+  "references": [
+    {
+      "path": "./tsconfig.vite-config.json"
+    }
   ]
 }

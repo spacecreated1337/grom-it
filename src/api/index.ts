@@ -1,6 +1,6 @@
 import axios from "axios"
 
-import Character from "./interface/character.inferface.ts"
+import Character from "../types/table/Character.ts"
 
 axios.defaults.baseURL = "https://rickandmortyapi.com/api"
 

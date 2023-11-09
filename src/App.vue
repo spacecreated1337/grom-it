@@ -2,15 +2,14 @@
 import theTable from "@/components/table/the-table.vue"
 </script>
 <template>
-  <div class="app">
-    <the-table />
-  </div>
+  <the-table />
 </template>
 <style lang="scss">
 #app {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  position: relative;
   height: 100vh;
+  overflow: auto;
+  width: 100%;
+  padding: 20px;
 }
 </style>
