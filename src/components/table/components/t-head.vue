@@ -58,7 +58,7 @@ const clickHandler = (header: string) => {
     position: relative;
 
     &::after {
-      content: url("src/assets/img/arrow-up.svg");
+      content: url("/img/arrow-up.svg");
       position: absolute;
       top: 60%;
       right: 37%;
@@ -70,7 +70,7 @@ const clickHandler = (header: string) => {
     position: relative;
 
     &::after {
-      content: url("src/assets/img/arrow-down.svg");
+      content: url("/img/arrow-down.svg");
       position: absolute;
       top: 60%;
       right: 37%;
