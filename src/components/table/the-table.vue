@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { getCharacters } from "@/api"
 import THead from "@/components/table/components/t-head.vue"
-import { computed, onMounted, ref } from "vue"
+import { computed, onMounted, ref, watch } from "vue"
 import type { Ref } from "vue"
 import type { Headers } from "@/types/table/Headers.ts"
 import Character from "@/types/table/Character.ts"
@@ -56,6 +56,13 @@ const changeSort = (header: string) => {
   }
 }
 
+watch(
+  () => sortBy.value,
+  () => {
+    sortState.value = 1
+  }
+)
+
 const filteredCharacters = computed(() => {
   if (!characters.value) return
 
@@ -101,7 +108,12 @@ const filteredCharacters = computed(() => {
         tableCaptionTitle
       }}
     </caption>
-    <t-head :headers="tableHeaders" @sort="changeSort" />
+    <t-head
+      :sort-by="sortBy"
+      :sort-state="sortMap[sortState]"
+      :headers="tableHeaders"
+      @sort="changeSort"
+    />
     <t-body
       v-if="characters"
       :headers="tableHeaders"
