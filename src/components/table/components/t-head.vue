@@ -35,16 +35,17 @@ const clickHandler = (header: string) => {
 <template>
   <thead>
     <tr>
-      <th
-        v-for="header in headers"
-        :key="header"
-        :class="{
-          'header-sort': headersToSort.includes(header),
-          [sortState ? sortState : '']: sortBy === header
-        }"
-        @click="clickHandler(header)"
-      >
-        {{ headersTranslate[header as keyof Headers] }}
+      <th v-for="header in headers" :key="header" @click="clickHandler(header)">
+        <div :class="{ 'header-sort': headersToSort.includes(header) }">
+          {{ headersTranslate[header as keyof Headers] }}
+          <img
+            v-if="sortBy === header && sortState"
+            src="/img/arrow-up.svg"
+            :class="{
+              [sortState ? sortState : '']: sortBy === header
+            }"
+          />
+        </div>
       </th>
     </tr>
   </thead>
@@ -53,29 +54,18 @@ const clickHandler = (header: string) => {
 .header-sort {
   text-decoration: underline;
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  justify-content: center;
 
-  &.asc {
+  & .asc {
     position: relative;
-
-    &::after {
-      content: url("/img/arrow-up.svg");
-      position: absolute;
-      top: 60%;
-      right: 37%;
-      transform: translate(-50%, -50%) scale(0.8);
-    }
+    transform: scale(0.8);
   }
 
-  &.desc {
-    position: relative;
-
-    &::after {
-      content: url("/img/arrow-down.svg");
-      position: absolute;
-      top: 60%;
-      right: 37%;
-      transform: translate(-50%, -50%) scale(0.8);
-    }
+  & .desc {
+    transform: rotate(180deg) scale(0.8);
   }
 }
 </style>
