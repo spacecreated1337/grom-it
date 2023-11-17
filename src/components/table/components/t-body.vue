@@ -6,7 +6,6 @@ defineProps<{
   headers: Headers
   characters: Character[] | null
 }>()
-
 const emits = defineEmits<{
   (e: "open-modal", id: number): void
 }>()

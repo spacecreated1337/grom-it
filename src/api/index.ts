@@ -1,28 +1,25 @@
 import axios from "axios"
 
-import Character from "../types/table/Character.ts"
-
 axios.defaults.baseURL = "https://rickandmortyapi.com/api"
-const allCharacters: Character[] = []
+import { pinia } from "@/store/piniaInstance.ts"
+import { useMainStore } from "@/store/mainStore"
 
-export async function getCharacters(page: number = 1): Promise<Character[]> {
+const store = useMainStore(pinia)
+
+export async function getCharacters(page: number = 1): Promise<void> {
   try {
-    const result = await axios(`/character?page=${page}`)
+    const { data } = await axios(`/character?page=${page}`)
 
-    allCharacters.push(...result.data.results)
-
-    if (!result.data.info.next) {
-      return allCharacters
+    if (!data.info.next) {
+      store.setCharacters(data.results)
+      return
     }
 
-    getCharacters(++page)
-
-    return allCharacters
+    store.setCharacters(data.results)
+    await getCharacters(++page)
   } catch (error) {
     if (error instanceof Error) {
       console.log("error message: ", error.message)
     }
-
-    return []
   }
 }

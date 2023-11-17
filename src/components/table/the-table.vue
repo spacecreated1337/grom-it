@@ -9,6 +9,9 @@ import TBody from "@/components/table/components/t-body.vue"
 import SortMap from "@/types/table/SortMap.ts"
 import deepClone from "lodash.clonedeep"
 import TableModal from "@/components/table/components/table-modal.vue"
+import { useMainStore } from "@/store/mainStore.ts"
+
+const mainStore = useMainStore()
 
 const tableCaptionTitle: string = "Таблица со всеми персонажами из мультсериала Рик и Морти"
 
@@ -17,7 +20,6 @@ const emits = defineEmits<{
 }>()
 
 let tableHeaders: Ref<Headers> = ref(null)
-let characters: Ref<Character[] | null> = ref(null)
 let sortState: Ref<number> = ref(0)
 let sortBy: Ref<string | null> = ref(null)
 const sortMap: SortMap = {
@@ -31,7 +33,7 @@ let character: Ref<Character | null> = ref(null)
 
 const openModal = (id: number) => {
   isShowModal.value = true
-  character.value = characters.value?.find((char) => char.id === id) || null
+  character.value = mainStore.characters?.find((char) => char.id === id) || null
 }
 
 const closeModal = () => {
@@ -40,13 +42,21 @@ const closeModal = () => {
 }
 
 onMounted(async () => {
-  characters.value = await getCharacters()
-  emits("remove-loader")
-  tableHeaders.value = Object.keys(characters.value[0]).filter((key) => key !== "episode")
+  getCharacters()
 })
 
+watch(
+  () => mainStore.characters,
+  (newValue, oldValue) => {
+    if (oldValue.length === 0) {
+      emits("remove-loader")
+      tableHeaders.value = Object.keys(mainStore.characters[0]).filter((key) => key !== "episode")
+    }
+  }
+)
+
 const changeSort = (header: string) => {
-  if (!characters.value) return
+  if (!mainStore.characters) return
 
   sortBy.value = header
   sortState.value++
@@ -64,10 +74,9 @@ watch(
 )
 
 const filteredCharacters = computed(() => {
-  if (!characters.value) return
+  if (!mainStore.characters) return
 
-  const clone = deepClone(characters.value)
-
+  const clone = deepClone(mainStore.characters)
   let aValue
   let bValue
 
@@ -102,7 +111,7 @@ const filteredCharacters = computed(() => {
 })
 </script>
 <template>
-  <table>
+  <table v-if="mainStore.characters.length">
     <caption>
       {{
         tableCaptionTitle
@@ -114,12 +123,7 @@ const filteredCharacters = computed(() => {
       :headers="tableHeaders"
       @sort="changeSort"
     />
-    <t-body
-      v-if="characters"
-      :headers="tableHeaders"
-      :characters="filteredCharacters"
-      @open-modal="openModal"
-    />
+    <t-body :headers="tableHeaders" :characters="filteredCharacters" @open-modal="openModal" />
   </table>
   <table-modal :is-open="isShowModal" :character="character" @close-modal="closeModal" />
 </template>
