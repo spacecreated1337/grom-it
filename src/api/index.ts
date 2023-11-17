@@ -15,7 +15,7 @@ export async function getCharacters(page: number = 1): Promise<Character[]> {
       return allCharacters
     }
 
-    await getCharacters(++page)
+    getCharacters(++page)
 
     return allCharacters
   } catch (error) {
